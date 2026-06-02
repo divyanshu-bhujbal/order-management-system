@@ -24,4 +24,5 @@ class Product(Base):
             name="ck_products_quantity_in_stock_non_negative",
         ),
         Index("ix_products_name", "name"),
+        Index("ix_products_quantity_in_stock", "quantity_in_stock"),
     )

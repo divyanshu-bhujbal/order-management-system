@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     db_pool_timeout: int = Field(default=30, alias="DB_POOL_TIMEOUT")
     db_pool_recycle: int = Field(default=1800, alias="DB_POOL_RECYCLE")
 
+    low_stock_threshold: int = Field(default=10, alias="LOW_STOCK_THRESHOLD")
+
 
 @lru_cache
 def get_settings() -> Settings:
