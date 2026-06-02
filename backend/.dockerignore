@@ -1,0 +1,40 @@
+# VCS
+.git
+.gitignore
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environment/config
+.env
+.env.*
+!.env.example
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Tests and docs not needed in production image
+tests/
+*.md
+
+# Frontend and unrelated workspace files (if build context is repo root)
+frontend/
+Technical Assessment (Software Engineer).docx
