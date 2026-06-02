@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     db_pool_recycle: int = Field(default=1800, alias="DB_POOL_RECYCLE")
 
     low_stock_threshold: int = Field(default=10, alias="LOW_STOCK_THRESHOLD")
+    run_migrations_on_startup: bool = Field(
+        default=True,
+        alias="RUN_MIGRATIONS_ON_STARTUP",
+    )
 
     @property
     def cors_allow_origins_list(self) -> list[str]:

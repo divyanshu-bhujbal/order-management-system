@@ -26,6 +26,7 @@ os.environ.setdefault("DB_MAX_OVERFLOW", "20")
 os.environ.setdefault("DB_POOL_TIMEOUT", "30")
 os.environ.setdefault("DB_POOL_RECYCLE", "1800")
 os.environ.setdefault("LOW_STOCK_THRESHOLD", "10")
+os.environ.setdefault("RUN_MIGRATIONS_ON_STARTUP", "false")
 
 from app.api.dependencies import get_app_settings, get_db  # noqa: E402
 from app.core.config import Settings  # noqa: E402
