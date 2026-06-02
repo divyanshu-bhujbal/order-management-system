@@ -1,0 +1,92 @@
+name: order-management-system
+
+services:
+    postgres:
+        image: postgres:16-alpine
+        container_name: oms-postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: order_management
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U postgres -d order_management']
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+        networks:
+            - oms-network
+
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        container_name: oms-backend
+        restart: unless-stopped
+        environment:
+            APP_NAME: Order Management System API
+            APP_ENV: production
+            APP_DEBUG: 'false'
+            API_V1_PREFIX: /api/v1
+            HOST: 0.0.0.0
+            PORT: '8000'
+            DATABASE_URL: postgresql+psycopg://postgres:${POSTGRES_PASSWORD:-change_me}@postgres:5432/order_management
+            DB_ECHO: 'false'
+            DB_POOL_SIZE: '10'
+            DB_MAX_OVERFLOW: '20'
+            DB_POOL_TIMEOUT: '30'
+            DB_POOL_RECYCLE: '1800'
+            LOW_STOCK_THRESHOLD: '10'
+        depends_on:
+            postgres:
+                condition: service_healthy
+        ports:
+            - '8000:8000'
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'python -c "import socket; s=socket.create_connection((''127.0.0.1'', 8000), timeout=3); s.close()"',
+                ]
+            interval: 15s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+        networks:
+            - oms-network
+
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        container_name: oms-frontend
+        restart: unless-stopped
+        depends_on:
+            backend:
+                condition: service_healthy
+        ports:
+            - '80:80'
+        healthcheck:
+            test:
+                [
+                    'CMD-SHELL',
+                    'wget -q -O /dev/null http://127.0.0.1/healthz || exit 1',
+                ]
+            interval: 15s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+        networks:
+            - oms-network
+
+volumes:
+    postgres_data:
+        name: oms_postgres_data
+
+networks:
+    oms-network:
+        name: oms-network
+        driver: bridge

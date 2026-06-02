@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     )
     app_debug: bool = Field(default=False, alias="APP_DEBUG")
     api_v1_prefix: str = Field(default="/api/v1", alias="API_V1_PREFIX")
+    cors_allow_origins: str = Field(
+        default="http://localhost,http://127.0.0.1,http://localhost:80,http://127.0.0.1:80",
+        alias="CORS_ALLOW_ORIGINS",
+    )
 
     host: str = Field(default="0.0.0.0", alias="HOST")
     port: int = Field(default=8000, alias="PORT")
@@ -32,6 +36,14 @@ class Settings(BaseSettings):
     db_pool_recycle: int = Field(default=1800, alias="DB_POOL_RECYCLE")
 
     low_stock_threshold: int = Field(default=10, alias="LOW_STOCK_THRESHOLD")
+
+    @property
+    def cors_allow_origins_list(self) -> list[str]:
+        return [
+            origin.strip()
+            for origin in self.cors_allow_origins.split(",")
+            if origin.strip()
+        ]
 
 
 @lru_cache
