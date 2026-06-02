@@ -2,6 +2,7 @@ name: order-management-system
 
 services:
     postgres:
+        platform: ${DOCKER_PLATFORM:-linux/arm64}
         image: postgres:16-alpine
         container_name: oms-postgres
         restart: unless-stopped
@@ -21,6 +22,7 @@ services:
             - oms-network
 
     backend:
+        platform: ${DOCKER_PLATFORM:-linux/arm64}
         build:
             context: ./backend
             dockerfile: Dockerfile
@@ -59,6 +61,7 @@ services:
             - oms-network
 
     frontend:
+        platform: ${DOCKER_PLATFORM:-linux/arm64}
         build:
             context: ./frontend
             dockerfile: Dockerfile

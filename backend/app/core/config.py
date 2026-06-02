@@ -28,7 +28,10 @@ class Settings(BaseSettings):
     host: str = Field(default="0.0.0.0", alias="HOST")
     port: int = Field(default=8000, alias="PORT")
 
-    database_url: str = Field(alias="DATABASE_URL")
+    database_url: str = Field(
+        default="sqlite+pysqlite:///./oms.db",
+        alias="DATABASE_URL",
+    )
     db_echo: bool = Field(default=False, alias="DB_ECHO")
     db_pool_size: int = Field(default=10, alias="DB_POOL_SIZE")
     db_max_overflow: int = Field(default=20, alias="DB_MAX_OVERFLOW")
