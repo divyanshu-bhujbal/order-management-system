@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-ARG TARGETPLATFORM=linux/arm64
+# ARG TARGETPLATFORM=linux/arm64
 
 FROM --platform=$TARGETPLATFORM python:3.12-slim AS builder
 
@@ -57,4 +57,4 @@ USER app
 EXPOSE 8000
 
 # Run with a single Uvicorn process; scale replicas at orchestrator level.
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
